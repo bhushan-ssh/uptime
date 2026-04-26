@@ -8,6 +8,8 @@ import plotly.express as px
 import time
 import datetime
 
+
+
 # ---- Page config ----
 st.set_page_config(page_title="NexGen Predictive Maintenance", page_icon="⚙️", layout="wide", initial_sidebar_state="expanded")
 
@@ -15,56 +17,119 @@ st.set_page_config(page_title="NexGen Predictive Maintenance", page_icon="⚙️
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+[data-testid="stAppViewContainer"] {
+    background: radial-gradient(circle at 10% 20%, rgb(18, 18, 28) 0%, rgb(10, 10, 15) 100%);
+}
+[data-testid="stHeader"] {
+    background: transparent;
+}
 html, body, [class*="css"]  {
     font-family: 'Inter', sans-serif;
 }
 .metric-card {
-    background-color: #1E1E2E;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    background-color: rgba(30, 30, 46, 0.4);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     text-align: center;
-    border: 1px solid #2B2B3C;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+@keyframes pulse-critical {
+    0% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0.4), inset 0 0 0 1px rgba(255, 61, 0, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 61, 0, 0), inset 0 0 0 1px rgba(255, 61, 0, 0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0), inset 0 0 0 1px rgba(255, 61, 0, 0.5); }
+}
+.pulse-critical {
+    animation: pulse-critical 2s infinite;
+    border: 1px solid rgba(255, 61, 0, 0.5) !important;
+}
+
 .metric-value {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 800;
-    margin: 10px 0;
+    margin: 10px 0 5px;
+    letter-spacing: -1px;
 }
 .metric-label {
-    font-size: 14px;
-    color: #9E9E9E;
+    font-size: 13px;
+    color: #A0A0B0;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
 }
-.warning-value { color: #FFB300 !important; }
-.critical-value { color: #FF3D00 !important; }
-.safe-value { color: #00E676 !important; }
+.warning-value { color: #FFB300 !important; text-shadow: 0 0 10px rgba(255, 179, 0, 0.3); }
+.critical-value { color: #FF3D00 !important; text-shadow: 0 0 10px rgba(255, 61, 0, 0.3); }
+.safe-value { color: #00E676 !important; text-shadow: 0 0 10px rgba(0, 230, 118, 0.3); }
 
 .header-container {
-    background: linear-gradient(90deg, #1A1A2E 0%, #16213E 100%);
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #0F3460;
+    background: linear-gradient(135deg, rgba(26,26,46,0.9) 0%, rgba(22,33,62,0.9) 100%);
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: 20px;
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(233, 69, 96, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+.header-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 60%);
+    transform: rotate(30deg);
+    pointer-events: none;
 }
 .main-title {
-    color: #E94560;
+    color: #FFFFFF;
     font-weight: 800;
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin: 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ffffff, #a0a0b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.main-title span {
+    background: linear-gradient(to right, #E94560, #FF9800);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .sub-title {
-    color: #A6A6A6;
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
+    color: #A0A0B0;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
-/* Streamlit Tabs Customization */
+/* Premium Streamlit Tabs Customization */
 div[data-baseweb="tab-list"] {
-    background-color: #16213E;
-    border-radius: 10px;
-    padding: 10px;
+    background-color: rgba(22, 33, 62, 0.6) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 12px !important;
+    padding: 5px !important;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+div[data-baseweb="tab"] {
+    background-color: transparent !important;
+    color: #A0A0B0 !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+}
+div[data-baseweb="tab"][aria-selected="true"] {
+    background-color: rgba(233, 69, 96, 0.2) !important;
+    color: #FFFFFF !important;
+    box-shadow: inset 0 0 0 1px rgba(233, 69, 96, 0.5);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -116,7 +181,7 @@ def get_feature_importance(X_input):
 # ---- UI Layout ----
 st.markdown("""
 <div class="header-container">
-    <h1 class="main-title">⚡ NexGen AI Predictive Maintenance System</h1>
+    <h1 class="main-title">⚡ <span>NexGen AI</span> Predictive Maintenance</h1>
     <p class="sub-title">Advanced Time-to-Failure, Anomaly Detection & Financial Impact Portal</p>
 </div>
 """, unsafe_allow_html=True)
@@ -188,15 +253,20 @@ if X_input is not None:
 
     # ---- Top KPI Deck ----
     col1, col2, col3, col4 = st.columns(4)
-    format_kpi = lambda label, val, cls: f"""<div class="metric-card">
+    format_kpi = lambda label, val, cls, extra_class="": f"""<div class="metric-card {extra_class}">
         <div class="metric-label">{label}</div>
         <div class="metric-value {cls}">{val}</div></div>"""
         
-    col1.markdown(format_kpi("Remaining Useful Life", f"{rul} Cycles", status_class), unsafe_allow_html=True)
-    col2.markdown(format_kpi("Overall Status", f"{icon} {status}", status_class), unsafe_allow_html=True)
     health_pct = min(100, max(0, int((rul/130)*100)))
+    pulse_class = "pulse-critical" if rul < 30 else ""
+
+    col1.markdown(format_kpi("Remaining Useful Life", f"{rul} Cycles", status_class, pulse_class), unsafe_allow_html=True)
+    col2.markdown(format_kpi("Overall Status", f"{icon} {status}", status_class, pulse_class), unsafe_allow_html=True)
     col3.markdown(format_kpi("Machine Health Core", f"{health_pct}%", status_class), unsafe_allow_html=True)
-    col4.markdown(format_kpi("Primary Failure Mode", top_failure, "critical-value" if rul < 30 else "warning-value" if rul < 80 else "safe-value"), unsafe_allow_html=True)
+    
+    top_failure_cls = "critical-value" if rul < 30 else "warning-value" if rul < 80 else "safe-value"
+    display_failure = top_failure if len(top_failure) < 20 else top_failure[:17] + "..."
+    col4.markdown(format_kpi("Primary Failure Mode", display_failure, top_failure_cls, "pulse-critical" if rul < 30 else ""), unsafe_allow_html=True)
     
     st.write("") 
 
@@ -262,7 +332,7 @@ if X_input is not None:
         st.markdown("### 🔍 Diagnostics & Failure Classification")
         st.caption("AI-driven root cause classification mapping via multi-dimensional component vulnerability distributions.")
         
-        diag_col1, diag_col2 = st.columns([1, 1.5])
+        diag_col1, diag_col2 = st.columns([1, 1])
         
         with diag_col1:
             radar_fig = go.Figure()
@@ -281,13 +351,13 @@ if X_input is not None:
             ))
             radar_fig.update_layout(
                 polar=dict(
-                    radialaxis=dict(visible=True, range=[0, max(100, max(values)+10)], gridcolor='rgba(128,128,128,0.2)'),
-                    angularaxis=dict(gridcolor='rgba(128,128,128,0.2)')
+                    radialaxis=dict(visible=False, range=[0, max(100, max(values)+10)]),
+                    angularaxis=dict(gridcolor='rgba(128,128,128,0.1)', linecolor='rgba(0,0,0,0)')
                 ),
                 showlegend=False,
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
-                height=300,
+                height=320,
                 margin=dict(l=40, r=40, t=20, b=20),
             )
             st.plotly_chart(radar_fig, use_container_width=True)
@@ -296,12 +366,12 @@ if X_input is not None:
             st.markdown("#### Vulnerability Probability Breakdown")
             for mode, prob in sorted(failure_probs.items(), key=lambda item: item[1], reverse=True):
                 if prob > 5:
-                    st.markdown(f"**{mode}**: {prob:.1f}%")
+                    st.markdown(f"<div style='display: flex; justify-content: space-between; margin-bottom: -10px;'><span><b>{mode}</b></span><span>{prob:.1f}%</span></div>", unsafe_allow_html=True)
                     st.progress(min(100, int(prob)))
             
             st.markdown(f"""
-            <div style="background-color: {'rgba(255, 61, 0, 0.1)' if rul < 30 else 'rgba(0, 230, 118, 0.1)'}; 
-                 padding: 15px; border-radius: 8px; border-left: 5px solid {gauge_color}; margin-top: 20px;">
+            <div style="background-color: {'rgba(255, 61, 0, 0.05)' if rul < 30 else 'rgba(0, 230, 118, 0.05)'}; 
+                 padding: 20px; border-radius: 12px; border: 1px solid {gauge_color}; margin-top: 25px;">
                 <b style="color: white">🧠 Maintenance Copilot Engine Recommendation:</b><br/>
                 <span style="color: #D3D3D3">
                 {
@@ -356,7 +426,7 @@ if X_input is not None:
             "Action Status": ["PENDING" if rul < 30 else "RESOLVED", "IN PROGRESS", "COMPLETED"],
             "Cost Impact": [f"+${int(cost_savings)}", "-$450", "$0"]
         }
-        st.dataframe(pd.DataFrame(log_data), use_container_width=True)
+        st.dataframe(pd.DataFrame(log_data), use_container_width=True, hide_index=True)
 
     if data_source == "Real-time Simulation Node" and auto_run:
         time.sleep(1)
