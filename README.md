@@ -1,1 +1,1 @@
-Uptime AI MAchine predictive maintainance
+Uptime AI MAchine predictive maintainance system for zero downtime
