@@ -12,10 +12,9 @@ import datetime
 
 
 
-# ---- Page config ----
 st.set_page_config(page_title="NexGen Predictive Maintenance", page_icon="⚙️", layout="wide", initial_sidebar_state="expanded")
 
-# ---- Custom CSS for Premium Dashboard Look ----
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
@@ -136,7 +135,7 @@ div[data-baseweb="tab"][aria-selected="true"] {
 </style>
 """, unsafe_allow_html=True)
 
-# ---- Caching Model Loading ----
+
 @st.cache_resource
 def load_models():
     import os
@@ -154,7 +153,7 @@ except Exception as e:
     st.error(f"Failed to load models: {e}")
     st.stop()
 
-# ---- Logic Functions ----
+
 def get_failure_probabilities(X_input, rul_pred):
     modes = ["Bearing Degradation", "Cooling System Failure", "Rotor Imbalance", "Lubrication Issue", "Overheating"]
     seed_val = int(abs(np.sum(X_input)) * 1000) % (2**32)
@@ -180,7 +179,7 @@ def get_feature_importance(X_input):
     variances = variances / np.sum(variances) * 100
     return variances
 
-# ---- UI Layout ----
+
 st.markdown("""
 <div class="header-container">
     <h1 class="main-title">⚡ <span>NexGen AI</span> Predictive Maintenance</h1>
@@ -236,7 +235,7 @@ with st.sidebar:
     st.caption("SVIT PSAR 66 Hackathon Winner")
 
 if X_input is not None:
-    # ---- Inference ----
+
     raw_pred = float(model.predict(X_input, verbose=0)[0][0])
     rul = max(0, round(raw_pred, 1))
     
