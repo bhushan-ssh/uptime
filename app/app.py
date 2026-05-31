@@ -252,7 +252,7 @@ if X_input is not None:
     failure_probs = get_failure_probabilities(X_input, rul)
     top_failure = max(failure_probs, key=failure_probs.get) if sum(failure_probs.values()) > 10 else "None Predicted"
 
-    # ---- Top KPI Deck ----
+   
     col1, col2, col3, col4 = st.columns(4)
     format_kpi = lambda label, val, cls, extra_class="": f"""<div class="metric-card {extra_class}">
         <div class="metric-label">{label}</div>
@@ -271,11 +271,11 @@ if X_input is not None:
     
     st.write("") 
 
-    # ---- TABS INTERFACE ----
+    
     tab1, tab2, tab3 = st.tabs(["📊 Live Monitoring Dashboard", "🧠 Model Explainability (XAI)", "💰 Enterprise Business ROI"])
 
     with tab1:
-        # ---- Main Dashboard Body ----
+        
         main_col1, main_col2 = st.columns([1.5, 1])
         
         with main_col1:
@@ -390,7 +390,7 @@ if X_input is not None:
         
         feat_importances = get_feature_importance(X_input)
         
-        # Plotly Bar chart for feature importance
+        
         xai_fig = px.bar(
             x=[f"Sensor Ch {i+1}" for i in range(min(10, n_features))], 
             y=feat_importances[:10],
@@ -407,7 +407,7 @@ if X_input is not None:
         st.markdown("### 💰 Financial & Enterprise Impact Tracker")
         st.write("Translating predictive analytics into direct business value.")
         
-        # Compute cost metrics
+        
         unplanned_downtime_cost_per_hour = 12500
         hours_downtime_avoided = max(0, (100 - health_pct) / 100 * 12) # Simulating up to 12 hours saved depending on degradation
         cost_savings = int(hours_downtime_avoided * unplanned_downtime_cost_per_hour)
