@@ -335,6 +335,17 @@ if X_input is not None:
         
         diag_col1, diag_col2 = st.columns([1, 1])
         
+
+
+
+
+
+
+
+
+
+
+        
         with diag_col1:
             radar_fig = go.Figure()
             categories = list(failure_probs.keys())
