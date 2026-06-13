@@ -333,28 +333,6 @@ if X_input is not None:
         st.markdown("### 🔍 Diagnostics & Failure Classification")
         st.caption("AI-driven root cause classification mapping via multi-dimensional component vulnerability distributions.")
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
         diag_col1, diag_col2 = st.columns([1, 1])
             
         with diag_col1:
