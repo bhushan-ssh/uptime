@@ -402,10 +402,6 @@ if X_input is not None:
         st.plotly_chart(xai_fig, use_container_width=True)
         
         st.info("The Deep Learning LSTM network processes temporal sequences. High importance indicates that this specific sensor stream is exhibiting anomalous patterns strongly correlated with the historical failures in your training dataset.")
-
-
-
-
     with tab3:
         st.markdown("### 💰 Financial & Enterprise Impact Tracker")
         st.write("Translating predictive analytics into direct business value.")
