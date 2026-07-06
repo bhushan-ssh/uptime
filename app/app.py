@@ -417,7 +417,8 @@ if X_input is not None:
         roi_c3.markdown(format_kpi("Maintenance Efficiency Lift", f"+{int(100 - health_pct)}%", "safe-value"), unsafe_allow_html=True)
         
         st.markdown("---")
-        st.markdown("#### Live Maintenance Action Log"
+        st.markdown("#### Live Maintenance Action Log")
+
         log_data = {
             "Timestamp": [(datetime.datetime.now() - datetime.timedelta(minutes=i*45)).strftime("%Y-%m-%d %H:%M") for i in range(3)],
             "Machine ID": ["Alpha-01", "Alpha-01", "Alpha-01"],
@@ -433,6 +434,8 @@ if X_input is not None:
         st.session_state.stream_data = np.concatenate((st.session_state.stream_data[:, 1:, :], new_row), axis=1)
         st.session_state.degradation_factor += 0.003
         st.rerun()
+
+
 
 else:
     st.info("👈 Please initialize the simulation node or upload a history log to commence prediction.")
