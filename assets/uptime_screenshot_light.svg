@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <defs>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#f3f6fb" />
+    </linearGradient>
+    <style>
+      .title { font-family: Inter, Arial, sans-serif; fill: #0b1220; font-weight: 700; font-size:28px }
+      .subtitle { font-family: Inter, Arial, sans-serif; fill: #556080; font-size:14px }
+      .card { fill: rgba(11,18,32,0.03); stroke: rgba(11,18,32,0.06); rx:14 }
+      .chart-line { fill: none; stroke:#0F3460; stroke-width:3; stroke-linecap:round }
+      .chart-area { fill: rgba(15,52,96,0.08) }
+      .muted { fill: #556080 }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g2)" />
+  <g transform="translate(40,30)">
+    <text class="title">NexGen AI — Predictive Maintenance (Preview)</text>
+    <text class="subtitle" transform="translate(0,28)">Interactive Streamlit dashboard • LSTM RUL • Failure-mode probabilities</text>
+
+    <g transform="translate(0,70)">
+      <rect x="0" y="0" width="760" height="280" class="card" />
+      <g transform="translate(24,20)">
+        <path class="chart-line" d="M0,220 C80,160 160,140 240,170 C320,190 400,130 480,150 C560,170 640,110 720,140" />
+        <path class="chart-area" d="M0,220 C80,160 160,140 240,170 C320,190 400,130 480,150 C560,170 640,110 720,140 L720,230 L0,230 Z" />
+      </g>
+    </g>
+
+    <g transform="translate(800,70)">
+      <rect x="0" y="0" width="340" height="80" class="card" />
+      <text x="16" y="28" class="muted">RUL</text>
+      <text x="16" y="58" fill="#0F3460" font-size="30" font-weight="800">72 Cycles</text>
+
+      <rect x="0" y="110" width="340" height="240" class="card" />
+      <text x="16" y="148" class="muted">Primary Failure Mode</text>
+      <text x="16" y="178" fill="#E94560" font-size="18" font-weight="700">Bearing Degradation</text>
+    </g>
+  </g>
+</svg>
