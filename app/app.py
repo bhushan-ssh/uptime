@@ -435,7 +435,5 @@ if X_input is not None:
         st.session_state.degradation_factor += 0.003
         st.rerun()
 
-
-
 else:
     st.info("👈 Please initialize the simulation node or upload a history log to commence prediction.")
