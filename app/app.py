@@ -436,3 +436,5 @@ if X_input is not None:
         st.rerun()
     else:
         st.info("👈 Please initialize the simulation node or upload a history log to commence prediction.")
+
+
